@@ -1,7 +1,16 @@
-import { Container, VStack, Heading, Text, Box, Image, Link } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { Container, VStack, Heading, Text, Box, Image, Link, Button } from "@chakra-ui/react";
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={8} align="stretch">
@@ -35,35 +44,26 @@ const Index = () => {
             Latest Posts
           </Heading>
           <VStack spacing={4} align="stretch">
-            <Box p={4} borderWidth="1px" borderRadius="md">
-              <Heading as="h3" size="md" mb={2}>
-                Understanding React Hooks
-              </Heading>
-              <Text fontSize="sm" color="gray.600">
-                March 10, 2023
-              </Text>
-              <Text mt={2}>
-                React Hooks have revolutionized the way we write React components. In this post, we'll dive deep into the basics of Hooks and how to use them effectively...
-              </Text>
-              <Link color="teal.500" href="#">
-                Read more
-              </Link>
-            </Box>
-            <Box p={4} borderWidth="1px" borderRadius="md">
-              <Heading as="h3" size="md" mb={2}>
-                A Guide to Node.js Performance Optimization
-              </Heading>
-              <Text fontSize="sm" color="gray.600">
-                February 25, 2023
-              </Text>
-              <Text mt={2}>
-                Node.js is a powerful tool for building server-side applications. However, performance optimization is key to ensuring your applications run smoothly...
-              </Text>
-              <Link color="teal.500" href="#">
-                Read more
-              </Link>
-            </Box>
+            {posts.map((post, index) => (
+              <Box key={index} p={4} borderWidth="1px" borderRadius="md">
+                <Heading as="h3" size="md" mb={2}>
+                  {post.title}
+                </Heading>
+                <Text fontSize="sm" color="gray.600">
+                  {post.date}
+                </Text>
+                <Text mt={2}>
+                  {post.content}
+                </Text>
+              </Box>
+            ))}
           </VStack>
+        </Box>
+
+        <Box textAlign="center">
+          <Button as={RouterLink} to="/add-post" colorScheme="teal" size="md">
+            Add New Post
+          </Button>
         </Box>
 
         <Box textAlign="center">
